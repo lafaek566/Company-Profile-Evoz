@@ -143,15 +143,15 @@ export default function Model3D() {
           camera={{ position: [5, 2, 5], fov: 45 }}
           gl={{ outputColorSpace: SRGBColorSpace }}
         >
-          <ambientLight intensity={0.5} />
+          <ambientLight intensity={2.5} />
           <directionalLight
             position={[3, 15, 7]}
-            intensity={4.5}
+            intensity={7.5}
             castShadow
             shadow-mapSize-width={1024}
             shadow-mapSize-height={1024}
           />
-          <pointLight position={[-5, 5, -5]} intensity={0.5} />
+          <pointLight position={[-5, 5, -5]} intensity={1.5} />
           <Suspense fallback={null}>
             <AnimatedAnt onLoaded={handleModelLoaded} />
             <MovingLights />

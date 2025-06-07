@@ -56,14 +56,14 @@ const Hero = () => {
 
         {/* Model 3D dengan Klik */}
         <div
-          className="w-full h-[250px] sm:h-[300px] md:h-[500px] lg:h-[600px] relative cursor-pointer"
+          className="w-full h-[250px] sm:h-[300px] md:h-[400px] lg:h-[600px] relative cursor-pointer"
           data-aos="fade-left"
           onClick={handleClick}
         >
           <Model3D />
           {showText && (
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white text-black px-4 py-2 rounded-lg shadow-lg text-lg font-semibold animate-fade-in">
-              Hi.. apa yang bisa dibantu?
+              Hi.. apa yang bisa kami dibantu?
             </div>
           )}
         </div>
