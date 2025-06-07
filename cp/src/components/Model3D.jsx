@@ -2,13 +2,14 @@ import React, { Suspense, useRef, useEffect, useState } from "react";
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import { OrbitControls, useAnimations, useFBX } from "@react-three/drei";
 import * as THREE from "three";
-import { TextureLoader } from "three";
+import { TextureLoader, SRGBColorSpace } from "three";
 
+// Ant Model with Animations and Texture
 function AnimatedAnt({ onLoaded }) {
   const group = useRef();
   const fbx = useFBX("/assets/ant/source/ant.fbx");
 
-  // Load textures
+  // Load multiple textures
   const textures = useLoader(TextureLoader, [
     "/assets/ant/textures/1.jpg",
     "/assets/ant/textures/2.png",
@@ -19,7 +20,6 @@ function AnimatedAnt({ onLoaded }) {
   const { animations } = fbx;
   const { actions } = useAnimations(animations, group);
 
-  // Play all animations
   useEffect(() => {
     if (actions) {
       Object.values(actions).forEach((action) => {
@@ -31,23 +31,23 @@ function AnimatedAnt({ onLoaded }) {
     }
   }, [actions]);
 
-  // Apply textures & replace material with MeshStandardMaterial to support lighting & textures properly
   useEffect(() => {
     if (fbx && textures.length > 0) {
       let i = 0;
       fbx.traverse((child) => {
         if (child.isMesh) {
+          const texture = textures[i % textures.length];
+          texture.colorSpace = SRGBColorSpace;
           child.material = new THREE.MeshStandardMaterial({
-            map: textures[i % textures.length],
-            roughness: 0.4, // buat material lebih realistis
-            metalness: 0.1, // sedikit metalik agar refleksi lebih natural
+            map: texture,
+            roughness: 0.4,
+            metalness: 0.1,
           });
-          child.material.map.encoding = THREE.sRGBEncoding; // Correct color space
           child.material.needsUpdate = true;
           i++;
         }
       });
-      onLoaded(); // notify parent loading finished
+      onLoaded(); // Let parent know model is ready
     }
   }, [fbx, textures, onLoaded]);
 
@@ -63,6 +63,7 @@ function AnimatedAnt({ onLoaded }) {
   );
 }
 
+// Dynamic Light Animation
 function MovingLights() {
   const pointLightRef = useRef();
   const spotLightRef = useRef();
@@ -70,15 +71,19 @@ function MovingLights() {
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
     if (pointLightRef.current) {
-      pointLightRef.current.position.x = Math.sin(t) * 5;
-      pointLightRef.current.position.z = Math.cos(t) * 5;
-      pointLightRef.current.position.y = 2 + Math.sin(t * 2) * 1;
+      pointLightRef.current.position.set(
+        Math.sin(t) * 5,
+        2 + Math.sin(t * 2) * 1,
+        Math.cos(t) * 5
+      );
     }
 
     if (spotLightRef.current) {
-      spotLightRef.current.position.x = Math.sin(t * 0.5) * 2;
-      spotLightRef.current.position.y = 6 + Math.sin(t * 3) * 0.5;
-      spotLightRef.current.position.z = 2;
+      spotLightRef.current.position.set(
+        Math.sin(t * 0.5) * 2,
+        6 + Math.sin(t * 3) * 0.5,
+        2
+      );
     }
   });
 
@@ -95,7 +100,7 @@ function MovingLights() {
       />
       <spotLight
         ref={spotLightRef}
-        intensity={2.5}
+        intensity={3.5}
         angle={0.3}
         penumbra={0.5}
         position={[0, 6, 2]}
@@ -107,12 +112,11 @@ function MovingLights() {
   );
 }
 
+// Main Canvas Component
 export default function Model3D() {
   const [loading, setLoading] = useState(true);
 
-  function handleModelLoaded() {
-    setLoading(false);
-  }
+  const handleModelLoaded = () => setLoading(false);
 
   return (
     <>
@@ -137,12 +141,12 @@ export default function Model3D() {
         <Canvas
           shadows
           camera={{ position: [5, 2, 5], fov: 45 }}
-          gl={{ outputEncoding: THREE.sRGBEncoding }}
+          gl={{ outputColorSpace: SRGBColorSpace }}
         >
           <ambientLight intensity={0.5} />
           <directionalLight
             position={[3, 15, 7]}
-            intensity={1.5}
+            intensity={4.5}
             castShadow
             shadow-mapSize-width={1024}
             shadow-mapSize-height={1024}
