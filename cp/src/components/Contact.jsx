@@ -46,9 +46,9 @@ const Contact = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center px-4 sm:px-6 md:px-12 py-12">
+    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center justify-center px-4 sm:px-6 md:px-12 py-12 mt-[-170px]">
       <h1 className="text-4xl font-bold mb-8 tracking-wide text-center">
-        Hubungi Kami
+        Kontak
       </h1>
 
       <div className="flex flex-col md:flex-row items-center gap-10 w-full max-w-full">

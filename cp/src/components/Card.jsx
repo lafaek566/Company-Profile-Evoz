@@ -331,8 +331,8 @@ export default function Portfolio() {
       id="portfolio"
       className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-6 sm:px-10 md:px-20 lg:px-32 xl:px-48"
     >
-      <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-8">
-        My Portfolio
+      <h2 className="text-4xl font-bold text-center text-gray-900 dark:text-white mb-8">
+        Layanan Kami
       </h2>
 
       <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
